@@ -3,7 +3,6 @@
   craneLib,
   fetchFromGitHub,
   pkgsCross,
-  patchelf,
   libcap_ng,
   libkrunfw,
 }:
@@ -52,18 +51,11 @@ let
     doCheck = false;
   };
 
-  rpath = "${libkrunfw}/lib:${lib.makeLibraryPath [ libcap_ng ]}";
-
   commonArgs = {
     pname = "microsandbox-cli";
     inherit version;
     inherit src cargoVendorDir;
     cargoExtraArgs = "--locked --no-default-features --features net,ssh -p microsandbox-cli";
-
-    postPatch = ''
-      rm .cargo/config.toml
-    '';
-    RUSTFLAGS = "-C link-args=-Wl,-rpath,${rpath}";
 
     preBuild = ''
       mkdir -p build
@@ -72,7 +64,6 @@ let
     '';
 
     buildInputs = [ libcap_ng ];
-    nativeBuildInputs = [ patchelf ];
     doCheck = false;
   };
 
@@ -91,10 +82,7 @@ craneLib.buildPackage (commonArgs // {
     # versioned filename in $out/lib.
     # Ref: https://github.com/superradcompany/microsandbox/blob/v0.5.3/crates/utils/lib/lib.rs
     ln -s "${libkrunfw}/lib/libkrunfw.so.5" "$out/lib/${libkrunfwExpected}"
-    patchelf --set-rpath "${rpath}" "$out/bin/msb"
   '';
-
-  dontPatchELF = true;
 
   meta = {
     description = "CLI tool for the microsandbox container runtime";
