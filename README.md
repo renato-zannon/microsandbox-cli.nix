@@ -46,16 +46,16 @@ Install with Home Manager:
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     home-manager.url = "github:nix-community/home-manager";
-    microsandbox-nix.url = "github:renato-zannon/microsandbox-cli.nix";
+    microsandbox-cli.url = "github:renato-zannon/microsandbox-cli.nix";
   };
 
-  outputs = { self, nixpkgs, home-manager, microsandbox-nix, ... }:
+  outputs = { self, nixpkgs, home-manager, microsandbox-cli, ... }:
     {
       homeConfigurations."your-user" = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs { system = "x86_64-linux"; };
         modules = [
           {
-            home.packages = [ microsandbox-nix.packages.x86_64-linux.msb ];
+            home.packages = [ microsandbox-cli.packages.x86_64-linux.msb ];
           }
         ];
       };
@@ -72,10 +72,10 @@ Install with Home Manager:
 ## Use As An Overlay
 
 ```nix
-inputs.microsandbox-nix.url = "github:renato-zannon/microsandbox-cli.nix";
+inputs.microsandbox-cli.url = "github:renato-zannon/microsandbox-cli.nix";
 
-outputs = { self, nixpkgs, microsandbox-nix, ... }:
+outputs = { self, nixpkgs, microsandbox-cli, ... }:
   {
-    overlays.default = microsandbox-nix.overlays.default;
+    overlays.default = microsandbox-cli.overlays.default;
   };
 ```
