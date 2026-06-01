@@ -9,6 +9,7 @@
 
 let
   version = "0.5.3";
+  libkrunfwExpected = "libkrunfw.so.5.2.1";
 
   srcs = {
     x86_64-linux = fetchurl {
@@ -41,6 +42,11 @@ stdenvNoCC.mkDerivation {
 
     install -D -m 755 "$src" "$out/bin/msb"
     ln -s msb "$out/bin/microsandbox"
+    mkdir -p "$out/lib"
+    # Upstream installer/runtime expect this exact filename in the install
+    # prefix, so expose it here as well.
+    # Ref: https://github.com/superradcompany/microsandbox/blob/v0.5.3/scripts/install.sh
+    ln -s "${libkrunfw}/lib/libkrunfw.so.5" "$out/lib/${libkrunfwExpected}"
 
     patchelf \
       --set-rpath "${rpath}" \

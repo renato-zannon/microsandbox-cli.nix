@@ -18,6 +18,24 @@ let
     fetchSubmodules = false;
   };
 
+  libkrunfwExpectedVersion =
+    let
+      content = builtins.readFile "${src}/crates/utils/lib/lib.rs";
+      line = lib.findFirst (l: lib.hasInfix "LIBKRUNFW_VERSION" l) null (lib.splitString "\n" content);
+      v = if line == null then null else builtins.elemAt (lib.splitString "\"" line) 1;
+    in
+    if v == null then
+      throw "Failed to extract LIBKRUNFW_VERSION from microsandbox source"
+    else
+      v;
+
+  libkrunfwExpected = let
+    expected = libkrunfwExpectedVersion;
+    actual = libkrunfw.version;
+    errorMsg = "Source code expected libkrunfw version ${expected} but building with ${actual}";
+  in
+    if (lib.assertMsg (expected == actual) errorMsg) then "libkrunfw.so.${expected}" else null;
+
   cargoVendorDir = craneLib.vendorCargoDeps { inherit src; };
 
   agentd = craneLib.buildPackage {
@@ -67,6 +85,12 @@ craneLib.buildPackage (commonArgs // {
 
   postInstall = ''
     ln -s msb "$out/bin/microsandbox"
+    mkdir -p "$out/lib"
+    # msb resolves libkrunfw by exact filename relative to msb path, not via
+    # SONAME lookup. Mirror upstream installer layout by placing the expected
+    # versioned filename in $out/lib.
+    # Ref: https://github.com/superradcompany/microsandbox/blob/v0.5.3/crates/utils/lib/lib.rs
+    ln -s "${libkrunfw}/lib/libkrunfw.so.5" "$out/lib/${libkrunfwExpected}"
     patchelf --set-rpath "${rpath}" "$out/bin/msb"
   '';
 

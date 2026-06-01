@@ -23,12 +23,16 @@
       mkPackages = pkgs:
         let
           craneLib = mkCraneLib pkgs;
+          libkrunfwPinned = pkgs.callPackage ./pkgs/libkrunfw-pinned { };
         in
         {
           msb = pkgs.callPackage ./pkgs/msb {
             inherit craneLib;
+            libkrunfw = libkrunfwPinned;
           };
-          msb-prebuilt = pkgs.callPackage ./pkgs/msb-prebuilt { };
+          msb-prebuilt = pkgs.callPackage ./pkgs/msb-prebuilt {
+            libkrunfw = libkrunfwPinned;
+          };
         };
     in
     {
