@@ -8,12 +8,12 @@
 }:
 
 let
-  version = "0.5.3";
+  version = "0.5.6";
   src = fetchFromGitHub {
     owner = "superradcompany";
     repo = "microsandbox";
     rev = "v${version}";
-    hash = "sha256-BUwZeSQXO73rU0WULG/TdwBX6+LK79nTFCDYRc09pBI=";
+    hash = "sha256-rRQmS/V/x2iy5Z/XFMn3Q/Hcba5hp4qbCviQTPsXV7w=";
     fetchSubmodules = false;
   };
 

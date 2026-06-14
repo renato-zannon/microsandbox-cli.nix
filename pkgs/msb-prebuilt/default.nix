@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.5.3";
+  version = "0.5.6";
   libkrunfwExpected = "libkrunfw.so.5.2.1";
 
   srcs = {
