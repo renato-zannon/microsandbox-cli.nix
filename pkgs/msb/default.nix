@@ -8,12 +8,12 @@
 }:
 
 let
-  version = "0.5.6";
+  version = "0.6.1";
   src = fetchFromGitHub {
     owner = "superradcompany";
     repo = "microsandbox";
     rev = "v${version}";
-    hash = "sha256-rRQmS/V/x2iy5Z/XFMn3Q/Hcba5hp4qbCviQTPsXV7w=";
+    hash = "sha256-Bd+1kuqqLZqJ2UibVEp+5C//qLpelMd62+XZElZd1U8=";
     fetchSubmodules = false;
   };
 
@@ -80,7 +80,7 @@ craneLib.buildPackage (commonArgs // {
     # msb resolves libkrunfw by exact filename relative to msb path, not via
     # SONAME lookup. Mirror upstream installer layout by placing the expected
     # versioned filename in $out/lib.
-    # Ref: https://github.com/superradcompany/microsandbox/blob/v0.5.3/crates/utils/lib/lib.rs
+    # Ref: https://github.com/superradcompany/microsandbox/blob/v0.6.1/crates/utils/lib/lib.rs
     ln -s "${libkrunfw}/lib/libkrunfw.so.5" "$out/lib/${libkrunfwExpected}"
   '';
 

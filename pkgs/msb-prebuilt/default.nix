@@ -8,17 +8,17 @@
 }:
 
 let
-  version = "0.5.6";
+  version = "0.6.1";
   libkrunfwExpected = "libkrunfw.so.5.2.1";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/superradcompany/microsandbox/releases/download/v${version}/msb-linux-x86_64";
-      hash = "sha256-dc8gm4b5YWYtmAsWCX3W3W6qWYTGKwmEwbflb8xPPs8=";
+      hash = "sha256-cm4365/uYtFZe8UKaarg1+RnEkLepM4WlvXq0n4nAa8=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/superradcompany/microsandbox/releases/download/v${version}/msb-linux-aarch64";
-      hash = "sha256-I/QSizPxjkQp6fSTVZu+auyARbICBd/DjwN/4m3nAUk=";
+      hash = "sha256-LwnJS5zdojg2NWNGTGGSjVPJE/XO7GHMYcpa1qxfndA=";
     };
   };
 
@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation {
     mkdir -p "$out/lib"
     # Upstream installer/runtime expect this exact filename in the install
     # prefix, so expose it here as well.
-    # Ref: https://github.com/superradcompany/microsandbox/blob/v0.5.3/scripts/install.sh
+    # Ref: https://github.com/superradcompany/microsandbox/blob/v0.6.1/scripts/install.sh
     ln -s "${libkrunfw}/lib/libkrunfw.so.5" "$out/lib/${libkrunfwExpected}"
 
     patchelf \
